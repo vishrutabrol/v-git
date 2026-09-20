@@ -3,6 +3,7 @@ import { Repository } from "../repository/repository.js";
 import { initRepository } from "./commands/init.js";
 import { hashObject } from "./commands/hashObject.js";
 import { add } from "./commands/add.js";
+import { status } from "./commands/status.js";
 
 async function main(): Promise<void> {
   const command = process.argv[2];
