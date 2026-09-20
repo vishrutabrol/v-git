@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 
-import { Repository } from "../../repository/repository";
+import { Repository } from "../../repository/repository.js";
 import { ObjectStore } from "../../objects/objectStore.js";
 import { Index } from "../../index/index.js";
 
