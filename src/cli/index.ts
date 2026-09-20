@@ -39,25 +39,71 @@ async function main(): Promise<void> {
   }
 
   if (command === "add") {
-  const filePath = process.argv[3];
+    const filePath = process.argv[3];
 
-  if (!filePath) {
-    console.error("Usage: add <file>");
-    process.exit(1);
+    if (!filePath) {
+      console.error("Usage: add <file>");
+      process.exit(1);
+    }
+
+    const currentDirectory = process.cwd();
+
+    const repository = new Repository(currentDirectory);
+
+    await add(repository, filePath);
+
+    console.log(`Added ${filePath}`);
+
+    return;
   }
 
-  const currentDirectory = process.cwd();
+  if (command === "status") {
+    const currentDirectory = process.cwd();
 
-  const repository = new Repository(
-    currentDirectory
-  );
+    const repository = new Repository(currentDirectory);
 
-  await add(repository, filePath);
+    const result = await status(repository);
 
-  console.log(`Added ${filePath}`);
+    if (result.modified.length > 0) {
+      console.log("Changes not staged:");
 
-  return;
-}
+      for (const filePath of result.modified) {
+        console.log(`  modified: ${filePath}`);
+      }
+
+      console.log();
+    }
+
+    if (result.deleted.length > 0) {
+      console.log("Deleted:");
+
+      for (const filePath of result.deleted) {
+        console.log(`  deleted: ${filePath}`);
+      }
+
+      console.log();
+    }
+
+    if (result.untracked.length > 0) {
+      console.log("Untracked files:");
+
+      for (const filePath of result.untracked) {
+        console.log(`  ${filePath}`);
+      }
+
+      console.log();
+    }
+
+    if (
+      result.modified.length === 0 &&
+      result.deleted.length === 0 &&
+      result.untracked.length === 0
+    ) {
+      console.log("Working tree clean.");
+    }
+
+    return;
+  }
 
   console.log("Unknown command.");
 }
