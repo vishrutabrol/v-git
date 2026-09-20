@@ -97,5 +97,9 @@ export class Index {
   ): string | undefined {
     return this.data[filePath];
   }
+
+  entries(): IndexData {
+  return { ...this.data };
+  }
 }
  

@@ -2,6 +2,7 @@ import process from "node:process";
 import { Repository } from "../repository/repository.js";
 import { initRepository } from "./commands/init.js";
 import { hashObject } from "./commands/hashObject.js";
+import { add } from "./commands/add.js";
 
 async function main(): Promise<void> {
   const command = process.argv[2];
@@ -36,6 +37,27 @@ async function main(): Promise<void> {
 
     return;
   }
+
+  if (command === "add") {
+  const filePath = process.argv[3];
+
+  if (!filePath) {
+    console.error("Usage: add <file>");
+    process.exit(1);
+  }
+
+  const currentDirectory = process.cwd();
+
+  const repository = new Repository(
+    currentDirectory
+  );
+
+  await add(repository, filePath);
+
+  console.log(`Added ${filePath}`);
+
+  return;
+}
 
   console.log("Unknown command.");
 }
